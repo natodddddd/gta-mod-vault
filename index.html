@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTA SA Mod Vault</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navbar Header -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <div class="logo">SAN ANDREAS <span>VAULT</span></div>
+      <input type="text" id="searchInput" placeholder="Cari mod, mobil, script..." autocomplete="off">
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Filter Kategori -->
+    <div class="category-bar" id="categoryBar">
+      <button class="cat-btn active" data-cat="All">All Mods</button>
+      <button class="cat-btn" data-cat="Vehicles">Vehicles</button>
+      <button class="cat-btn" data-cat="Graphics">Graphics</button>
+      <button class="cat-btn" data-cat="CLEO">CLEO</button>
+      <button class="cat-btn" data-cat="Skins">Skins</button>
+    </div>
+
+    <!-- Grid Tempat Mod Ditampilkan -->
+    <div id="modGrid" class="mod-grid"></div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
