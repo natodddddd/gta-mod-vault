@@ -25,5 +25,14 @@
     "fileSize": "1.1 MB",
     "thumbnail": "https://picsum.photos/400/250?random=3",
     "downloadUrl": "https://mega.nz/file/sample3"
+  },
+  {
+    "id": 4,
+    "title": "Chevrolet Suburban FBI",
+    "category": "Vehicles",
+    "author": "KINOman",
+    "fileSize": "6 MB",
+    "thumbnail": "https://cs4.gtaall.com/screenshots/4dc09/2014-02/large-fit/7de753cf8d878850bbd491966fe25f73ff647a58/159904-gta-sa-2014-02-09-16-39-46-87.jpg",
+    "downloadUrl": "https://dl4.gtaall.com/en/manual/36606/1789296759/480f29bfe2e49cb5bccec3db67b0216f99987d19/"
   }
 ]
