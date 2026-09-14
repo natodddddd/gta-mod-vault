@@ -73,3 +73,32 @@ document.getElementById('categoryBar').addEventListener('click', (e) => {
 
 // Jalankan aplikasi saat dibuka
 fetchMods();
+
+// Chatango Widget Embed (gtamabar2004)
+const chatScript = document.createElement('script');
+chatScript.id = "cid0020000450374074062";
+chatScript.setAttribute('data-cfasync', 'false');
+chatScript.async = true;
+chatScript.src = "//st.chatango.com/js/gz/emb.js";
+chatScript.style.cssText = "width: 311px; height: 486px;";
+chatScript.textContent = JSON.stringify({
+  "handle": "gtamabar2004",
+  "arch": "js",
+  "styles": {
+    "a": "ffcc00",
+    "b": 82,
+    "c": "000000",
+    "d": "000000",
+    "f": 82,
+    "i": 82,
+    "k": "ffcc00",
+    "l": "ffcc00",
+    "m": "ffcc00",
+    "o": 82,
+    "p": "10",
+    "q": "ffcc00",
+    "r": 82,
+    "fwtickm": 1
+  }
+});
+document.body.appendChild(chatScript);
