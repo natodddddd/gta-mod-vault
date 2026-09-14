@@ -102,3 +102,22 @@ chatScript.textContent = JSON.stringify({
   }
 });
 document.body.appendChild(chatScript);
+
+function changeTheme(themeName) {
+  if (themeName === 'default') {
+    document.documentElement.removeAttribute('data-theme');
+  } else {
+    document.documentElement.setAttribute('data-theme', themeName);
+  }
+  localStorage.setItem('selectedTheme', themeName);
+}
+
+const savedTheme = localStorage.getItem('selectedTheme') || 'default';
+if (savedTheme !== 'default') {
+  document.documentElement.setAttribute('data-theme', savedTheme);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const themeSelect = document.getElementById('themeSelect');
+  if (themeSelect) themeSelect.value = savedTheme;
+});
