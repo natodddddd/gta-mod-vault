@@ -1,77 +1,67 @@
 let allMods = [];
-let activeCategory = 'All';
-let searchQuery = '';
 
-// 1. Ambil data dari mods.json
+// Fetch data mods dari mods.json
 async function fetchMods() {
   try {
     const response = await fetch('mods.json');
     allMods = await response.json();
-    renderMods();
-  } catch (err) {
-    console.error('Gagal mengambil data mod:', err);
+    renderMods(allMods);
+  } catch (error) {
+    console.error('Gagal mengambil data mods:', error);
   }
 }
 
-// 2. Filter & Render Mod ke HTML
-function renderMods() {
-  const container = document.getElementById('modGrid');
+// Render daftar mod ke HTML
+function renderMods(mods) {
+  const container = document.getElementById('modContainer');
+  if (!container) return;
+  
   container.innerHTML = '';
-
-  const filtered = allMods.filter(mod => {
-    const matchesCat = activeCategory === 'All' || mod.category === activeCategory;
-    const matchesSearch = mod.title.toLowerCase().includes(searchQuery) ||
-                          mod.category.toLowerCase().includes(searchQuery) ||
-                          mod.author.toLowerCase().includes(searchQuery);
-    return matchesCat && matchesSearch;
-  });
-
-  if (filtered.length === 0) {
-    container.innerHTML = `<p class="no-results">Mod tidak ditemukan.</p>`;
-    return;
-  }
-
-  filtered.forEach(mod => {
+  mods.forEach(mod => {
     const card = document.createElement('div');
     card.className = 'mod-card';
     card.innerHTML = `
-      <div>
-        <div class="card-image-wrap">
-          <img src="${mod.thumbnail}" alt="${mod.title}">
-          <span class="badge">${mod.category}</span>
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">${mod.title}</h3>
-          <p class="card-meta">By: ${mod.author} • ${mod.fileSize}</p>
-        </div>
-      </div>
-      <div class="card-footer">
-        <a href="${mod.downloadUrl}" target="_blank" rel="noopener noreferrer" class="btn-download">
-          Download Mod ➔
-        </a>
+      <img src="${mod.thumbnail}" alt="${mod.title}">
+      <h3>${mod.title}</h3>
+      <p>Author: ${mod.author} | Size: ${mod.file_size}</p>
+      <div class="card-buttons" style="display: flex; gap: 8px; margin-top: 10px;">
+        <button onclick="openModal(${mod.id})" style="flex:1; background:#2a2a2e; color:#fff; border:1px solid #ffcc00; padding:8px; cursor:pointer; font-weight:bold;">Detail</button>
+        <a href="${mod.download_url}" target="_blank" style="flex:1; background:#ffcc00; color:#000; text-align:center; padding:8px; text-decoration:none; font-weight:bold;">Download</a>
       </div>
     `;
-    container.innerHTML += card.outerHTML;
+    container.appendChild(card);
   });
 }
 
-// 3. Event Listener Search Bar
-document.getElementById('searchInput').addEventListener('input', (e) => {
-  searchQuery = e.target.value.toLowerCase();
-  renderMods();
-});
+// Fungsi Buka Modal Detail
+function openModal(id) {
+  const mod = allMods.find(m => m.id === id);
+  if (!mod) return;
 
-// 4. Event Listener Tombol Kategori
-document.getElementById('categoryBar').addEventListener('click', (e) => {
-  if (e.target.classList.contains('cat-btn')) {
-    document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-    e.target.classList.add('active');
-    activeCategory = e.target.getAttribute('data-cat');
-    renderMods();
+  document.getElementById('modalImg').src = mod.thumbnail;
+  document.getElementById('modalTitle').innerText = mod.title;
+  document.getElementById('modalMeta').innerText = `Author: ${mod.author} | Size: ${mod.file_size} | Kategori: ${mod.category}`;
+  document.getElementById('modalDesc').innerText = mod.description || "Tidak ada deskripsi khusus.";
+  document.getElementById('modalGuide').innerText = mod.install_guide || "1. Ekstrak file .zip yang diunduh.\n2. Masukkan folder/file mod ke direktori 'modloader'.\n3. Buka game GTA SA.";
+  document.getElementById('modalDownload').href = mod.download_url;
+
+  document.getElementById('modModal').style.display = 'block';
+}
+
+// Fungsi Tutup Modal
+function closeModal() {
+  document.getElementById('modModal').style.display = 'none';
+}
+
+// Tutup modal kalau klik di luar kotak
+window.onclick = function(event) {
+  const modal = document.getElementById('modModal');
+  if (event.target === modal) {
+    closeModal();
   }
-});
+};
 
-// Jalankan aplikasi saat dibuka
+// Jalankan pengambilan data mod
 fetchMods();
 
 // Chatango Widget Embed (gtamabar2004)

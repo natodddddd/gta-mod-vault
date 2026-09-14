@@ -4,35 +4,43 @@
     "title": "Nissan Skyline R34 Full Tuning",
     "category": "Vehicles",
     "author": "kermanRB13",
-    "fileSize": "13 MB",
+    "file_size": "13 MB",
     "thumbnail": "https://cs4.gtaall.com/screenshots/4dc09/2016-02/large-fit/0d0e46a0194ea340b37581327946dd1e45495784/321159-gta-sa-2016-02-16-11-40-18-34.jpg",
-    "downloadUrl": "https://dl4.gtaall.com/en/manual/74473/1789296106/b487d7e3f01812e54b1aa5553c6a7bc1211dce18/"
+    "download_url": "https://dl4.gtaall.com/en/manual/74473/1789296106/b487d7e3f01812e54b1aa5553c6a7bc1211dce18/",
+    "description": "Mod mobil Nissan Skyline R34 High Quality lengkap dengan opsi full tuning di TransFender dan handling kencang.",
+    "install_guide": "1. Ekstrak file zip/rar yang sudah didownload.\n2. Masukkan folder mod ke direktori 'modloader'.\n3. Jalankan GTA San Andreas dan tes ke TransFender."
   },
   {
     "id": 2,
     "title": "Enb Freezin V3",
     "category": "Graphics",
     "author": "Unknown",
-    "fileSize": "130.7 MB",
+    "file_size": "130.7 MB",
     "thumbnail": "https://i.ibb.co/ncYjhx5/5f605b93cc75d-GTA-San-Andreas-15-09-2020-15-08-21.png",
-    "downloadUrl": "https://docs.google.com/uc?&export=download&id=1BJhxc9EPawXgh0WYB8voJnZ_TOK5MSk7"
+    "download_url": "https://docs.google.com/uc?&export=download&id=1BJhxc9EPawXgh0WYB8voJnZ_TOK5MSk7",
+    "description": "Graphic mod ENB Series V3 buatan Freezin. Menghasilkan pencahayaan, efek air, dan bayangan realistis.",
+    "install_guide": "1. Ekstrak isi file zip.\n2. Copy semua file ENB ke folder utama GTA San Andreas (satu direktori dengan gta_sa.exe).\n3. Buka game."
   },
   {
     "id": 3,
     "title": "Real Ragdoll Physics CLEO",
     "category": "CLEO",
     "author": "SA_Dev",
-    "fileSize": "1.1 MB",
+    "file_size": "1.1 MB",
     "thumbnail": "https://picsum.photos/400/250?random=3",
-    "downloadUrl": "https://mega.nz/file/sample3"
+    "download_url": "https://mega.nz/file/sample3",
+    "description": "Mod CLEO physics untuk memberikan efek ragdoll nyata saat ped atau CJ tertembak, tertabrak, atau jatuh.",
+    "install_guide": "1. Pastikan CLEO 4 sudah terinstall di GTA SA lu.\n2. Copy file .cs ke folder 'cleo' atau masukkan ke direktori 'modloader'.\n3. Buka game."
   },
   {
     "id": 4,
     "title": "Chevrolet Suburban FBI",
     "category": "Vehicles",
     "author": "KINOman",
-    "fileSize": "6 MB",
+    "file_size": "6 MB",
     "thumbnail": "https://cs4.gtaall.com/screenshots/4dc09/2014-02/large-fit/7de753cf8d878850bbd491966fe25f73ff647a58/159904-gta-sa-2014-02-09-16-39-46-87.jpg",
-    "downloadUrl": "https://dl4.gtaall.com/en/manual/36606/1789296759/480f29bfe2e49cb5bccec3db67b0216f99987d19/"
+    "download_url": "https://dl4.gtaall.com/en/manual/36606/1789296759/480f29bfe2e49cb5bccec3db67b0216f99987d19/",
+    "description": "Pengganti mobil FBI Rancher dengan Chevrolet Suburban HQ buatan KINOman. Detail interior dan eksterior sangat rapi.",
+    "install_guide": "1. Ekstrak file yang diunduh.\n2. Masukkan folder mod ke direktori 'modloader'.\n3. Cari kendaraan FBI Rancher di dalam game."
   }
 ]
