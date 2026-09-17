@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 
 JSON_FILE = 'mods.json'
 
@@ -15,6 +16,28 @@ def load_mods():
 def save_mods(mods):
     with open(JSON_FILE, 'w', encoding='utf-8') as f:
         json.dump(mods, f, indent=2, ensure_ascii=False)
+
+def auto_git_commit(mod_title):
+    print("\n--- Menjalankan Otomatisasi Git ---")
+    try:
+        # 1. Git Add
+        subprocess.run(["git", "add", "mods.json"], check=True)
+        
+        # 2. Git Commit
+        commit_message = f"tambah mod: {mod_title}"
+        subprocess.run(["git", "commit", "-m", commit_message], check=True)
+        print(f" Berhasil Commit: '{commit_message}'")
+
+        # 3. Tanya Push
+        do_push = input("Langsung push ke GitHub/Netlify? (y/n): ").strip().lower()
+        if do_push == 'y':
+            subprocess.run(["git", "push"], check=True)
+            print(" BERHASIL PUSH KE GITHUB/NETLIFY!")
+        else:
+            print(" Disimpan di commit lokal (belum di-push).")
+
+    except subprocess.CalledProcessError as e:
+        print(f" Gagal mengeksekusi perintah Git: {e}")
 
 def main():
     mods = load_mods()
@@ -44,7 +67,10 @@ def main():
 
     mods.append(new_mod)
     save_mods(mods)
-    print(f"\n BERHASIL! '{title}' udah otomatis masuk ke {JSON_FILE} (ID: {next_id})\n")
+    print(f"\n Data '{title}' berhasil disimpan di {JSON_FILE} (ID: {next_id})")
+
+    # Jalankan git commit otomatis
+    auto_git_commit(title)
 
 if __name__ == '__main__':
     main()
