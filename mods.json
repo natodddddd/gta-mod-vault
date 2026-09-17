@@ -37,13 +37,38 @@
   },
   {
     "id": 5,
-    "title": "Sonic 150R Style VietNam",
-    "category": "Vehicles",
-    "author": "davil66",
-    "file_size": "16 MB",
-    "thumbnail": "https://cs3.gtaall.com/screenshots/4dc09/2024-11/large-fit/616bde506a1b139377108e7c799604e5e5545897/1486127-gallery1.jpg",
-    "download_url": "https://www.gtaall.com/get-manual/e5aa97be3e2b31e70b95771517391c3354c98067/275708-sonic-150r-style-vietnam-touring.html",
-    "description": "keren katanya.",
-    "install_guide": "add to modloader"
+    "title": "GTA SA HD Retexture",
+    "category": "Graphics",
+    "author": "Unknown",
+    "fileSize": "1.2 GB",
+    "thumbnail": "https://i.ibb.co/0Fv6y4M/5f605b93cc75d-GTA-San-Andreas-15-09-2020-15-08-21.png",
+    "downloadUrl": "https://mega.nz/file/sample5"
+  },
+  {
+    "id": 6,
+    "title": "Realistic Weapon Sounds",
+    "category": "Audio",
+    "author": "SoundModder",
+    "fileSize": "50 MB",
+    "thumbnail": "https://picsum.photos/400/250?random=6",
+    "downloadUrl": "https://mega.nz/file/sample6"
+  },
+  {
+    "id": 7,
+    "title": "Enhanced Weather Effects",
+    "category": "Graphics",
+    "author": "WeatherWizard",
+    "fileSize": "200 MB",
+    "thumbnail": "https://picsum.photos/400/250?random=7",
+    "downloadUrl": "https://mega.nz/file/sample7"
+  },
+  {
+    "id": 8,
+    "title": "Custom Radio Stations",
+    "category": "Audio",
+    "author": "DJModder",
+    "fileSize": "75 MB",
+    "thumbnail": "https://picsum.photos/400/250?random=8",
+    "downloadUrl": "https://mega.nz/file/sample8"
   }
 ]
