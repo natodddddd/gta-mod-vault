@@ -9,5 +9,16 @@
     "download_url": "https://www.gtainside.com/sanandreas/mods/modifications/215455-tembok-ratapan-los-santos/download",
     "description": "Context: Pria Solo from Indonesia",
     "install_guide": "add to modloader"
+  },
+  {
+    "id": 2,
+    "title": "Realistic Skybox Pack",
+    "category": "Graphics",
+    "author": "Rizky Aldiansyah",
+    "file_size": "11 MB",
+    "thumbnail": "https://www.gtainside.com/img/202410/b/1728416653_Screenshot%20556.jpg",
+    "download_url": "https://www.gtainside.com/sanandreas/mods/modifications/202149-realistic-skybox-pack/download",
+    "description": "Realistic Skybox Pack is a mod based on the Real Skybox mod by Junior_djjr.",
+    "install_guide": "add to moadloader:)"
   }
 ]
