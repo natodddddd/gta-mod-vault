@@ -18,15 +18,6 @@
     "downloadUrl": "https://docs.google.com/uc?&export=download&id=1BJhxc9EPawXgh0WYB8voJnZ_TOK5MSk7"
   },
   {
-    "id": 3,
-    "title": "Real Ragdoll Physics CLEO",
-    "category": "CLEO",
-    "author": "SA_Dev",
-    "fileSize": "1.1 MB",
-    "thumbnail": "https://picsum.photos/400/250?random=3",
-    "downloadUrl": "https://mega.nz/file/sample3"
-  },
-  {
     "id": 4,
     "title": "Chevrolet Suburban FBI",
     "category": "Vehicles",
@@ -37,38 +28,13 @@
   },
   {
     "id": 5,
-    "title": "GTA SA HD Retexture",
-    "category": "Graphics",
-    "author": "Unknown",
-    "fileSize": "1.2 GB",
-    "thumbnail": "https://i.ibb.co/0Fv6y4M/5f605b93cc75d-GTA-San-Andreas-15-09-2020-15-08-21.png",
-    "downloadUrl": "https://mega.nz/file/sample5"
-  },
-  {
-    "id": 6,
-    "title": "Realistic Weapon Sounds",
-    "category": "Audio",
-    "author": "SoundModder",
-    "fileSize": "50 MB",
-    "thumbnail": "https://picsum.photos/400/250?random=6",
-    "downloadUrl": "https://mega.nz/file/sample6"
-  },
-  {
-    "id": 7,
-    "title": "Enhanced Weather Effects",
-    "category": "Graphics",
-    "author": "WeatherWizard",
-    "fileSize": "200 MB",
-    "thumbnail": "https://picsum.photos/400/250?random=7",
-    "downloadUrl": "https://mega.nz/file/sample7"
-  },
-  {
-    "id": 8,
-    "title": "Custom Radio Stations",
-    "category": "Audio",
-    "author": "DJModder",
-    "fileSize": "75 MB",
-    "thumbnail": "https://picsum.photos/400/250?random=8",
-    "downloadUrl": "https://mega.nz/file/sample8"
+    "title": "Odong-odong",
+    "category": "Vehicles",
+    "author": "asgando",
+    "file_size": "11",
+    "thumbnail": "https://cs4.gtaall.com/screenshots/4dc09/2024-03/large-fit/fde1eb73724664b5a817b85219798d484f10ca46/1382888-gallery1.jpg",
+    "download_url": "https://www.gtaall.com/get-manual/426f5659997b496bc5a0f37047fff0da79926bf1/255733-odong-odong-3.html",
+    "description": "- Beautiful body",
+    "install_guide": "add to modloader"
   }
 ]
