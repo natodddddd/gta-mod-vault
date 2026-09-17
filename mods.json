@@ -20,5 +20,16 @@
     "download_url": "https://www.gtainside.com/sanandreas/mods/modifications/202149-realistic-skybox-pack/download",
     "description": "Realistic Skybox Pack is a mod based on the Real Skybox mod by Junior_djjr.",
     "install_guide": "add to moadloader:)"
+  },
+  {
+    "id": 3,
+    "title": "Reshade like ENB",
+    "category": "Graphics",
+    "author": "From yutub RandiHNKR",
+    "file_size": "2 MB",
+    "thumbnail": "https://img.youtube.com/vi/yZgXpeIt1zk/maxresdefault.jpg",
+    "download_url": "https://www.mediafire.com/file/1f3pyhncnpinayh/Reshade+++Colormod+Colorfull.rar/file",
+    "description": "rikues pais simbolon",
+    "install_guide": "paste in direktori gta kalian"
   }
 ]
