@@ -43,6 +43,28 @@
     <div id="modGrid" class="mod-grid"></div>
   </main>
 
+    <!-- Modal Preview -->
+  <div id="modModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <img id="modalImg" class="modal-img" src="" alt="Mod Preview">
+      <h3 id="modalTitle" class="modal-title"></h3>
+      <div id="modalMeta" class="modal-meta"></div>
+      
+      <div class="modal-section">
+        <h4>Deskripsi</h4>
+        <p id="modalDesc"></p>
+      </div>
+
+      <div class="modal-section">
+        <h4>Panduan Pasang</h4>
+        <p id="modalGuide" style="white-space: pre-line;"></p>
+      </div>
+
+      <a id="modalDownload" href="#" target="_blank" class="download-btn">DOWNLOAD MOD</a>
+    </div>
+  </div>
+
   <script src="app.js"></script>
   
 </body>

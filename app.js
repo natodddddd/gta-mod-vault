@@ -1,108 +1,92 @@
 let allMods = [];
-let activeCategory = 'All';
-let searchQuery = '';
+let currentCategory = 'All';
 
-// 1. Ambil data dari mods.json
+// 1. Fetch data dari mods.json
 async function fetchMods() {
   try {
     const response = await fetch('mods.json');
     allMods = await response.json();
     renderMods();
-  } catch (err) {
-    console.error('Gagal mengambil data mod:', err);
+  } catch (error) {
+    console.error('Gagal mengambil data mods:', error);
+    document.getElementById('modGrid').innerHTML = '<p class="no-results">Gagal memuat data mod.</p>';
   }
 }
 
-// 2. Filter & Render Mod ke HTML
+// 2. Render Card Mod ke DOM
 function renderMods() {
-  const container = document.getElementById('modGrid');
-  container.innerHTML = '';
+  const modGrid = document.getElementById('modGrid');
+  const searchInput = document.getElementById('searchInput').value.toLowerCase();
 
-  const filtered = allMods.filter(mod => {
-    const matchesCat = activeCategory === 'All' || mod.category === activeCategory;
-    const matchesSearch = mod.title.toLowerCase().includes(searchQuery) ||
-                          mod.category.toLowerCase().includes(searchQuery) ||
-                          mod.author.toLowerCase().includes(searchQuery);
-    return matchesCat && matchesSearch;
+  const filteredMods = allMods.filter(mod => {
+    const matchesCategory = currentCategory === 'All' || mod.category === currentCategory;
+    const matchesSearch = mod.title.toLowerCase().includes(searchInput) || 
+                          (mod.author && mod.author.toLowerCase().includes(searchInput));
+    return matchesCategory && matchesSearch;
   });
 
-  if (filtered.length === 0) {
-    container.innerHTML = `<p class="no-results">Mod tidak ditemukan.</p>`;
+  if (filteredMods.length === 0) {
+    modGrid.innerHTML = '<p class="no-results">Mod tidak ditemukan.</p>';
     return;
   }
 
-  filtered.forEach(mod => {
-    const card = document.createElement('div');
-    card.className = 'mod-card';
-    card.innerHTML = `
-      <div>
-        <div class="card-image-wrap">
-          <img src="${mod.thumbnail}" alt="${mod.title}">
-          <span class="badge">${mod.category}</span>
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">${mod.title}</h3>
-          <p class="card-meta">By: ${mod.author} • ${mod.fileSize}</p>
-        </div>
+  modGrid.innerHTML = filteredMods.map(mod => `
+    <div class="mod-card">
+      <div class="card-image-wrap" onclick="openModal(${mod.id})" style="cursor: pointer;">
+        <img src="${mod.thumbnail || 'https://via.placeholder.com/300x180'}" alt="${mod.title}">
+        <span class="badge">${mod.category}</span>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title" onclick="openModal(${mod.id})" style="cursor: pointer;">${mod.title}</h3>
+        <p class="card-meta">Author: ${mod.author || 'Unknown'} | ${mod.file_size || 'N/A'}</p>
       </div>
       <div class="card-footer">
-        <a href="${mod.downloadUrl}" target="_blank" rel="noopener noreferrer" class="btn-download">
-          Download Mod ➔
-        </a>
+        <button class="btn-download" onclick="openModal(${mod.id})">PREVIEW & DOWNLOAD</button>
       </div>
-    `;
-    container.innerHTML += card.outerHTML;
-  });
+    </div>
+  `).join('');
 }
 
-// 3. Event Listener Search Bar
-document.getElementById('searchInput').addEventListener('input', (e) => {
-  searchQuery = e.target.value.toLowerCase();
-  renderMods();
-});
+// 3. Logika Modal Preview
+function openModal(id) {
+  const mod = allMods.find(m => m.id === id);
+  if (!mod) return;
 
-// 4. Event Listener Tombol Kategori
+  document.getElementById('modalImg').src = mod.thumbnail || 'https://via.placeholder.com/600x300';
+  document.getElementById('modalTitle').innerText = mod.title;
+  document.getElementById('modalMeta').innerText = `Kategori: ${mod.category} | Author: ${mod.author || 'Unknown'} | Ukuran: ${mod.file_size || 'N/A'}`;
+  document.getElementById('modalDesc').innerText = mod.description || 'Tidak ada deskripsi khusus.';
+  document.getElementById('modalGuide').innerText = mod.install_guide || '1. Ekstrak file.\n2. Masukkan ke folder modloader.';
+  document.getElementById('modalDownload').href = mod.download_url || '#';
+
+  document.getElementById('modModal').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('modModal').style.display = 'none';
+}
+
+// Tutup modal jika area di luar kotak modal diklik
+window.onclick = function(event) {
+  const modal = document.getElementById('modModal');
+  if (event.target === modal) {
+    closeModal();
+  }
+};
+
+// 4. Logika Filter Kategori & Search
 document.getElementById('categoryBar').addEventListener('click', (e) => {
   if (e.target.classList.contains('cat-btn')) {
     document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
     e.target.classList.add('active');
-    activeCategory = e.target.getAttribute('data-cat');
+    currentCategory = e.target.getAttribute('data-cat');
     renderMods();
   }
 });
 
-// Jalankan aplikasi saat dibuka
-fetchMods();
+document.getElementById('searchInput').addEventListener('input', renderMods);
 
-// Chatango Widget Embed (gtamabar2004)
-const chatScript = document.createElement('script');
-chatScript.id = "cid0020000450374074062";
-chatScript.setAttribute('data-cfasync', 'false');
-chatScript.async = true;
-chatScript.src = "//st.chatango.com/js/gz/emb.js";
-chatScript.style.cssText = "width: 311px; height: 486px;";
-chatScript.textContent = JSON.stringify({
-  "handle": "gtamabar2004",
-  "arch": "js",
-  "styles": {
-    "a": "ffcc00",
-    "b": 82,
-    "c": "000000",
-    "d": "000000",
-    "f": 82,
-    "i": 82,
-    "k": "ffcc00",
-    "l": "ffcc00",
-    "m": "ffcc00",
-    "o": 82,
-    "p": "10",
-    "q": "ffcc00",
-    "r": 82,
-    "fwtickm": 1
-  }
-});
-document.body.appendChild(chatScript);
-
+// 5. Logika Theme Switcher (Auto Save)
 function changeTheme(themeName) {
   if (themeName === 'default') {
     document.documentElement.removeAttribute('data-theme');
@@ -112,6 +96,7 @@ function changeTheme(themeName) {
   localStorage.setItem('selectedTheme', themeName);
 }
 
+// Load tema saat pertama kali dibuka
 const savedTheme = localStorage.getItem('selectedTheme') || 'default';
 if (savedTheme !== 'default') {
   document.documentElement.setAttribute('data-theme', savedTheme);
@@ -120,4 +105,5 @@ if (savedTheme !== 'default') {
 document.addEventListener('DOMContentLoaded', () => {
   const themeSelect = document.getElementById('themeSelect');
   if (themeSelect) themeSelect.value = savedTheme;
+  fetchMods();
 });
