@@ -16,12 +16,12 @@
   <header class="navbar">
     <div class="container nav-container">
       <select id="themeSelect" onchange="changeTheme(this.value)">
-  <option value="default">Dark Vault (Gold)</option>
-  <option value="grove">Grove Street (Hijau)</option>
-  <option value="light">Putih (Light)</option>
-  <option value="black">Hitam (Pitch Black)</option>
-  <option value="blue">Biru (Ocean)</option>
-  <option value="pink">Pink (Vice City)</option>
+        <option value="default">Dark Vault (Gold)</option>
+        <option value="grove">Grove Street (Hijau)</option>
+        <option value="light">Putih (Light)</option>
+        <option value="black">Hitam (Pitch Black)</option>
+        <option value="blue">Biru (Ocean)</option>
+        <option value="pink">Pink (Vice City)</option>
       </select>
 
       <div class="logo">SAN ANDREAS <span>VAULT</span></div>
@@ -44,7 +44,7 @@
     <div id="modGrid" class="mod-grid"></div>
   </main>
 
-    <!-- Modal Preview -->
+  <!-- Modal Preview -->
   <div id="modModal" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -63,30 +63,28 @@
       </div>
 
       <a id="modalDownload" href="#" target="_blank" class="download-btn">DOWNLOAD MOD</a>
+
+      <!-- Area Komentar (SUDAH DIPINDAHKAN KE DALAM MODAL CONTENT) -->
+      <div class="modal-section comment-section" style="margin-top: 25px; border-top: 1px solid #333; padding-top: 15px;">
+        <h4>Komentar Pengunjung</h4>
+        
+        <!-- Wadah List Komentar -->
+        <div id="commentsList" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;"></div>
+
+        <!-- Form Kirim Komentar -->
+        <form onsubmit="submitComment(event)" style="display: flex; flex-direction: column; gap: 8px;">
+          <input type="text" id="commentAuthor" placeholder="Nama kamu" required style="padding: 8px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff;">
+          <textarea id="commentText" placeholder="Tulis komentar..." required rows="2" style="padding: 8px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff; resize: vertical;"></textarea>
+          <button type="submit" class="download-btn" style="padding: 8px; cursor: pointer;">KIRIM KOMENTAR</button>
+        </form>
+      </div>
+
     </div>
   </div>
 
-<!-- Modal Preview -->
-  <div id="modModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">&times;</span>
-      <img id="modalImg" class="modal-img" src="" alt="Mod Preview">
-      <h3 id="modalTitle" class="modal-title"></h3>
-      <div id="modalMeta" class="modal-meta"></div>
-      
-      <div class="modal-section">
-        <h4>Deskripsi</h4>
-        <p id="modalDesc"></p>
-      </div>
-
-      <div class="modal-section">
-        <h4>Panduan Pasang</h4>
-        <p id="modalGuide" style="white-space: pre-line;"></p>
-      </div>
-
-      <a id="modalDownload" href="#" target="_blank" class="download-btn">DOWNLOAD MOD</a>
-    </div>
-  </div>
+  <!-- SDK Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
   <script src="app.js"></script>
   

@@ -1,3 +1,19 @@
+// === KONFIGURASI FIREBASE ===
+const firebaseConfig = {
+  apiKey: "AIzaSyDi2mtSkBA8nzMFS9P_XW85pgLd1xuv2vQ",
+  authDomain: "gtakuh-64e29.firebaseapp.com",
+  databaseURL: "https://gtakuh-64e29-default-rtdb.firebaseio.com",
+  projectId: "gtakuh-64e29",
+  storageBucket: "gtakuh-64e29.firebasestorage.app",
+  messagingSenderId: "49771543806",
+  appId: "1:49771543806:web:c704c55460157b549139af"
+};
+
+// Inisialisasi Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+let activeModId = null;
 let allMods = [];
 let currentCategory = 'All';
 
@@ -52,6 +68,8 @@ function openModal(id) {
   const mod = allMods.find(m => m.id === id);
   if (!mod) return;
 
+  activeModId = id; // Simpan ID mod aktif
+
   document.getElementById('modalImg').src = mod.thumbnail || 'https://via.placeholder.com/600x300';
   document.getElementById('modalTitle').innerText = mod.title;
   document.getElementById('modalMeta').innerText = `Kategori: ${mod.category} | Author: ${mod.author || 'Unknown'} | Ukuran: ${mod.file_size || 'N/A'}`;
@@ -59,11 +77,18 @@ function openModal(id) {
   document.getElementById('modalGuide').innerText = mod.install_guide || '1. Ekstrak file.\n2. Masukkan ke folder modloader.';
   document.getElementById('modalDownload').href = mod.download_url || '#';
 
+  // Load komentar realtime
+  loadComments(id);
+
   document.getElementById('modModal').style.display = 'block';
 }
 
 function closeModal() {
   document.getElementById('modModal').style.display = 'none';
+  if (activeModId) {
+    database.ref('comments/' + activeModId).off(); // Matikan listener
+    activeModId = null;
+  }
 }
 
 // Tutup modal jika area di luar kotak modal diklik
@@ -107,3 +132,53 @@ document.addEventListener('DOMContentLoaded', () => {
   if (themeSelect) themeSelect.value = savedTheme;
   fetchMods();
 });
+
+// 1. Baca Komentar secara Realtime
+function loadComments(modId) {
+  const commentsList = document.getElementById('commentsList');
+  commentsList.innerHTML = '<p style="color: #888; font-size: 12px;">Memuat komentar...</p>';
+
+  database.ref('comments/' + modId).on('value', (snapshot) => {
+    commentsList.innerHTML = '';
+    const data = snapshot.val();
+
+    if (!data) {
+      commentsList.innerHTML = '<p style="color: #888; font-size: 12px;">Belum ada komentar. Jadi yang pertama!</p>';
+      return;
+    }
+
+    Object.values(data).forEach(c => {
+      const item = document.createElement('div');
+      item.style.cssText = 'background: rgba(255,255,255,0.05); padding: 8px; border-radius: 4px; margin-bottom: 6px; font-size: 13px;';
+      item.innerHTML = `<strong>${c.author}</strong> <span style="font-size: 10px; color: #888;">(${c.time})</span>:<br>${c.text}`;
+      commentsList.appendChild(item);
+    });
+
+    commentsList.scrollTop = commentsList.scrollHeight;
+  });
+}
+
+// 2. Kirim Komentar Baru
+function submitComment(e) {
+  e.preventDefault();
+  if (!activeModId) return;
+
+  const authorInput = document.getElementById('commentAuthor');
+  const textInput = document.getElementById('commentText');
+
+  const author = authorInput.value.trim();
+  const text = textInput.value.trim();
+
+  if (!author || !text) return;
+
+  const now = new Date();
+  const timeStr = `${now.toLocaleDateString()} ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+
+  database.ref('comments/' + activeModId).push({
+    author: author,
+    text: text,
+    time: timeStr
+  });
+
+  textInput.value = '';
+}
