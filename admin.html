@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - GTA SA Mod Vault</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #0f0f11;
+      --bg-surface: #18181b;
+      --border: #27272a;
+      --accent: #f5b800;
+      --text-main: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-dark); color: var(--text-main); font-family: 'Space Grotesk', sans-serif; padding: 20px; }
+    .container { max-width: 600px; margin: 40px auto; background: var(--bg-surface); border: 1px solid var(--border); padding: 24px; }
+    h2 { color: var(--accent); margin-bottom: 20px; font-size: 1.3rem; }
+    
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
+    input, select, textarea {
+      width: 100%; padding: 10px; background: var(--bg-dark); border: 1px solid var(--border);
+      color: var(--text-main); font-family: inherit; font-size: 0.9rem;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); outline: none; }
+    
+    .btn {
+      width: 100%; padding: 12px; background: var(--accent); color: #000; font-weight: 700;
+      border: none; cursor: pointer; text-transform: uppercase; font-family: inherit; margin-top: 10px;
+    }
+    .btn-danger { background: var(--danger); color: #fff; width: auto; padding: 4px 8px; font-size: 0.75rem; }
+
+    .hidden { display: none; }
+    .mod-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border); }
+  </style>
+
+  <!-- Firebase Compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Form Login Admin -->
+    <div id="login-section">
+      <h2>Login Admin Mod Vault</h2>
+      <form id="login-form">
+        <div class="form-group">
+          <label>Email Admin</label>
+          <input type="email" id="login-email" required placeholder="bayu@sa-mp.my.id">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" required>
+        </div>
+        <button type="submit" class="btn">Login</button>
+      </form>
+    </div>
+
+    <!-- Panel Upload Mod (Tampil Setelah Login) -->
+    <div id="admin-dashboard" class="hidden">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Tambah Mod Baru</h2>
+        <button id="btn-logout" style="background:none; border:none; color:var(--text-muted); cursor:pointer; text-decoration:underline;">Logout</button>
+      </div>
+
+      <form id="upload-form">
+        <div class="form-group">
+          <label>Nama / Judul Mod</label>
+          <input type="text" id="mod-title" required placeholder="Contoh: Honda Vario 150 Drag">
+        </div>
+        <div class="form-group">
+          <label>Kategori</label>
+          <select id="mod-category" required>
+            <option value="Vehicles">Vehicles</option>
+            <option value="Weapons">Weapons</option>
+            <option value="Graphics">Graphics/ENB</option>
+            <option value="Skins">Skins</option>
+            <option value="Map">Map/Object</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>URL Gambar Preview</label>
+          <input type="url" id="mod-image" required placeholder="https://i.ibb.co/xxx/image.jpg">
+        </div>
+        <div class="form-group">
+          <label>URL Download</label>
+          <input type="url" id="mod-download" required placeholder="https://mediafire.com/file/xxx">
+        </div>
+        <div class="form-group">
+          <label>Deskripsi Mod</label>
+          <textarea id="mod-desc" rows="3" required placeholder="Penjelasan singkat mod..."></textarea>
+        </div>
+        <button type="submit" class="btn">Upload Mod Ke Web</button>
+      </form>
+
+      <h2 style="margin-top: 40px;">Daftar Mod Terpasang</h2>
+      <div id="admin-mod-list">
+        <!-- List mod ter-render di sini -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. PASTIKAN CONFIG FIREBASE SAMA DENGAN script.js KAMU
+    const firebaseConfig = {
+      apiKey: "PASTE_API_KEY_KAMU",
+      authDomain: "PASTE_AUTH_DOMAIN_KAMU",
+      databaseURL: "PASTE_DATABASE_URL_KAMU",
+      projectId: "PASTE_PROJECT_ID_KAMU",
+      storageBucket: "PASTE_STORAGE_BUCKET_KAMU",
+      messagingSenderId: "PASTE_MESSAGING_SENDER_ID_KAMU",
+      appId: "PASTE_APP_ID_KAMU"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    const loginSection = document.getElementById('login-section');
+    const adminDashboard = document.getElementById('admin-dashboard');
+
+    // Cek Status Auth State
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        loginSection.classList.add('hidden');
+        adminDashboard.classList.remove('hidden');
+        loadAdminMods();
+      } else {
+        loginSection.classList.remove('hidden');
+        adminDashboard.classList.add('hidden');
+      }
+    });
+
+    // Handle Login
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pass = document.getElementById('login-password').value;
+      
+      auth.signInWithEmailAndPassword(email, pass)
+        .catch(err => alert("Gagal login: " + err.message));
+    });
+
+    // Handle Logout
+    document.getElementById('btn-logout').addEventListener('click', () => auth.signOut());
+
+    // Handle Upload Mod
+    document.getElementById('upload-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const newMod = {
+        title: document.getElementById('mod-title').value,
+        category: document.getElementById('mod-category').value,
+        image: document.getElementById('mod-image').value,
+        downloadUrl: document.getElementById('mod-download').value,
+        desc: document.getElementById('mod-desc').value,
+        createdAt: Date.now()
+      };
+
+      db.ref('mods').push(newMod)
+        .then(() => {
+          alert("Mod Berhasil Diupload!");
+          document.getElementById('upload-form').reset();
+        })
+        .catch(err => alert("Gagal upload: " + err.message));
+    });
+
+    // Load & Render Mod untuk Hapus Data
+    function loadAdminMods() {
+      db.ref('mods').on('value', (snapshot) => {
+        const modContainer = document.getElementById('admin-mod-list');
+        modContainer.innerHTML = '';
+        
+        snapshot.forEach((child) => {
+          const key = child.key;
+          const mod = child.val();
+          
+          const item = document.createElement('div');
+          item.className = 'mod-item';
+          item.innerHTML = `
+            <span><strong>${mod.title}</strong> (${mod.category})</span>
+            <button onclick="deleteMod('${key}')" class="btn-danger">Hapus</button>
+          `;
+          modContainer.appendChild(item);
+        });
+      });
+    }
+
+    function deleteMod(key) {
+      if (confirm("Yakin mau hapus mod ini?")) {
+        db.ref('mods/' + key).remove();
+      }
+    }
+  </script>
+</body>
+</html>

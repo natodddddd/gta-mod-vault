@@ -182,3 +182,37 @@ function submitComment(e) {
 
   textInput.value = '';
 }
+
+// Membaca data mod realtime dari Firebase
+const modGrid = document.querySelector('.mod-grid'); // Sesuaikan nama class container kartu mod kamu
+
+function fetchModsFromFirebase() {
+  firebase.database().ref('mods').on('value', (snapshot) => {
+    if (!modGrid) return;
+    modGrid.innerHTML = ''; // Clear konten lama
+
+    if (!snapshot.exists()) {
+      modGrid.innerHTML = '<p>Belum ada mod yang diupload.</p>';
+      return;
+    }
+
+    snapshot.forEach((child) => {
+      const mod = child.val();
+      const modCard = `
+        <div class="mod-card" data-category="${mod.category}">
+          <img src="${mod.image}" alt="${mod.title}" loading="lazy">
+          <div class="mod-info">
+            <span class="mod-badge">${mod.category}</span>
+            <h3>${mod.title}</h3>
+            <p>${mod.desc}</p>
+            <a href="${mod.downloadUrl}" target="_blank" class="btn-download">Download Mod</a>
+          </div>
+        </div>
+      `;
+      modGrid.innerHTML += modCard;
+    });
+  });
+}
+
+// Jalankan fungsi saat web dibuka
+document.addEventListener('DOMContentLoaded', fetchModsFromFirebase);
