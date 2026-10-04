@@ -36,9 +36,9 @@
       width: 100%; padding: 12px; background: var(--accent); color: #000; font-weight: 700;
       border: none; cursor: pointer; text-transform: uppercase; font-family: inherit; margin-top: 10px;
     }
-    .btn-danger { background: var(--danger); color: #fff; width: auto; padding: 4px 8px; font-size: 0.75rem; }
+    .btn-danger { background: var(--danger); color: #fff; width: auto; padding: 4px 8px; font-size: 0.75rem; border: none; cursor: pointer; }
 
-    .hidden { display: none; }
+    .hidden { display: none !important; }
     .mod-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border); }
   </style>
 
@@ -66,7 +66,7 @@
       </form>
     </div>
 
-    <!-- Panel Upload Mod (Tampil Setelah Login) -->
+    <!-- Panel Upload Mod -->
     <div id="admin-dashboard" class="hidden">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2>Tambah Mod Baru</h2>
@@ -83,13 +83,21 @@
           <select id="mod-category" required>
             <option value="Vehicles">Vehicles</option>
             <option value="Weapons">Weapons</option>
-            <option value="Graphics">Graphics/ENB</option>
+            <option value="Graphics">Graphics</option>
             <option value="Skins">Skins</option>
-            <option value="Map">Map/Object</option>
+            <option value="Map">Map</option>
           </select>
         </div>
         <div class="form-group">
-          <label>URL Gambar Preview</label>
+          <label>Author / Pembuat</label>
+          <input type="text" id="mod-author" placeholder="Contoh: Bayu Azhar">
+        </div>
+        <div class="form-group">
+          <label>Ukuran File</label>
+          <input type="text" id="mod-size" placeholder="Contoh: 15 MB">
+        </div>
+        <div class="form-group">
+          <label>URL Gambar Thumbnail</label>
           <input type="url" id="mod-image" required placeholder="https://i.ibb.co/xxx/image.jpg">
         </div>
         <div class="form-group">
@@ -98,28 +106,30 @@
         </div>
         <div class="form-group">
           <label>Deskripsi Mod</label>
-          <textarea id="mod-desc" rows="3" required placeholder="Penjelasan singkat mod..."></textarea>
+          <textarea id="mod-desc" rows="3" placeholder="Penjelasan singkat mod..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Panduan Instalasi</label>
+          <textarea id="mod-guide" rows="2" placeholder="1. Ekstrak file&#10;2. Masukkan ke folder modloader"></textarea>
         </div>
         <button type="submit" class="btn">Upload Mod Ke Web</button>
       </form>
 
       <h2 style="margin-top: 40px;">Daftar Mod Terpasang</h2>
-      <div id="admin-mod-list">
-        <!-- List mod ter-render di sini -->
-      </div>
+      <div id="admin-mod-list"></div>
     </div>
   </div>
 
   <script>
-    // 1. PASTIKAN CONFIG FIREBASE SAMA DENGAN script.js KAMU
+    // Config Firebase Kunci Asli dari Proyek Kamu
     const firebaseConfig = {
-      apiKey: "PASTE_API_KEY_KAMU",
-      authDomain: "PASTE_AUTH_DOMAIN_KAMU",
-      databaseURL: "PASTE_DATABASE_URL_KAMU",
-      projectId: "PASTE_PROJECT_ID_KAMU",
-      storageBucket: "PASTE_STORAGE_BUCKET_KAMU",
-      messagingSenderId: "PASTE_MESSAGING_SENDER_ID_KAMU",
-      appId: "PASTE_APP_ID_KAMU"
+      apiKey: "AIzaSyDi2mtSkBA8nzMFS9P_XW85pgLd1xuv2vQ",
+      authDomain: "gtakuh-64e29.firebaseapp.com",
+      databaseURL: "https://gtakuh-64e29-default-rtdb.firebaseio.com",
+      projectId: "gtakuh-64e29",
+      storageBucket: "gtakuh-64e29.firebasestorage.app",
+      messagingSenderId: "49771543806",
+      appId: "1:49771543806:web:c704c55460157b549139af"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -129,7 +139,6 @@
     const loginSection = document.getElementById('login-section');
     const adminDashboard = document.getElementById('admin-dashboard');
 
-    // Cek Status Auth State
     auth.onAuthStateChanged((user) => {
       if (user) {
         loginSection.classList.add('hidden');
@@ -141,7 +150,6 @@
       }
     });
 
-    // Handle Login
     document.getElementById('login-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const email = document.getElementById('login-email').value;
@@ -151,19 +159,20 @@
         .catch(err => alert("Gagal login: " + err.message));
     });
 
-    // Handle Logout
     document.getElementById('btn-logout').addEventListener('click', () => auth.signOut());
 
-    // Handle Upload Mod
     document.getElementById('upload-form').addEventListener('submit', (e) => {
       e.preventDefault();
       
       const newMod = {
         title: document.getElementById('mod-title').value,
         category: document.getElementById('mod-category').value,
-        image: document.getElementById('mod-image').value,
-        downloadUrl: document.getElementById('mod-download').value,
-        desc: document.getElementById('mod-desc').value,
+        author: document.getElementById('mod-author').value || 'Unknown',
+        file_size: document.getElementById('mod-size').value || 'N/A',
+        thumbnail: document.getElementById('mod-image').value,
+        download_url: document.getElementById('mod-download').value,
+        description: document.getElementById('mod-desc').value || '',
+        install_guide: document.getElementById('mod-guide').value || '',
         createdAt: Date.now()
       };
 
@@ -175,12 +184,16 @@
         .catch(err => alert("Gagal upload: " + err.message));
     });
 
-    // Load & Render Mod untuk Hapus Data
     function loadAdminMods() {
       db.ref('mods').on('value', (snapshot) => {
         const modContainer = document.getElementById('admin-mod-list');
         modContainer.innerHTML = '';
         
+        if (!snapshot.exists()) {
+          modContainer.innerHTML = '<p style="color:#888;">Belum ada mod di database.</p>';
+          return;
+        }
+
         snapshot.forEach((child) => {
           const key = child.key;
           const mod = child.val();
